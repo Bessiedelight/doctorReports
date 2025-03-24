@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const PatientReportSchema = new mongoose.Schema({
   patientName: { type: String, required: true },
   doctor: { type: String, required: false },
-  hospitalId: { type: String, required: true, unique: true }, // Using hospitalId as per provided model
+  hospitalId: { type: String, required: true }, // Using hospitalId as per provided model
   dateOfBirth: { type: Date, required: true },
   gender: {
     type: String,
