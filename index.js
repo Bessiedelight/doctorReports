@@ -1,14 +1,27 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const cors = require('cors'); // Add CORS package
+const cors = require('cors');
 const connectDB = require('./db');
 const reportsRouter = require('./routes/reports');
 
 const app = express();
 
-// Configure CORS
+// Define allowed origins
+const allowedOrigins = [
+  'http://localhost:3000',              // Local development
+  'https://better-health-live.vercel.app' // Production
+];
+
+// Configure CORS to allow multiple origins
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g., curl) or if the origin is in the allowed list
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
