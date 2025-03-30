@@ -8,6 +8,7 @@ const app = express();
 
 // Define allowed origins
 const allowedOrigins = [
+  'http://localhost:5000',              // Local development
   'http://localhost:3000',              // Local development
   'https://better-health-live.vercel.app' // Production
 ];
