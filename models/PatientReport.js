@@ -18,6 +18,8 @@ const PatientReportSchema = new mongoose.Schema({
   heartRate: { type: Number, required: false },
   medication: { type: String, required: false },
   instructions: { type: String, required: false },
+}, {
+  timestamps: true // Auto-add createdAt and updatedAt
 });
 
 module.exports = mongoose.models.PatientReport || mongoose.model('PatientReport', PatientReportSchema);
