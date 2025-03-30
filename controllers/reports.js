@@ -83,9 +83,6 @@ const createReport = async (req, res) => {
     await report.save();
     res.status(201).json(report);
   } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ message: 'Hospital ID already exists' });
-    }
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -107,12 +104,10 @@ const updateReport = async (req, res) => {
     }
     res.json(report);
   } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ message: 'Hospital ID already exists' });
-    }
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Delete a report
 const deleteReport = async (req, res) => {
