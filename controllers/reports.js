@@ -1,13 +1,13 @@
-const Joi = require('joi');
-const PatientReport = require('../models/PatientReport');
+const Joi = require("joi");
+const PatientReport = require("../models/PatientReport");
 
 // Validation schema for creating a report
 const reportSchema = Joi.object({
   patientName: Joi.string().required(),
-  doctor: Joi.string().allow('').optional(),
+  doctor: Joi.string().allow("").optional(),
   hospitalId: Joi.string().required(),
   dateOfBirth: Joi.date().required(),
-  gender: Joi.string().valid('male', 'female', 'other').required(),
+  gender: Joi.string().valid("male", "female", "other").required(),
   symptoms: Joi.string().required(),
   diagnosis: Joi.string().required(),
   followUp: Joi.boolean().required(),
@@ -21,10 +21,10 @@ const reportSchema = Joi.object({
 // Validation schema for updating a report (all fields optional, at least one required)
 const updateSchema = Joi.object({
   patientName: Joi.string(),
-  doctor: Joi.string().allow(''),
+  doctor: Joi.string().allow(""),
   hospitalId: Joi.string(),
   dateOfBirth: Joi.date(),
-  gender: Joi.string().valid('male', 'female', 'other'),
+  gender: Joi.string().valid("male", "female", "other"),
   symptoms: Joi.string(),
   diagnosis: Joi.string(),
   followUp: Joi.boolean(),
@@ -39,7 +39,7 @@ const updateSchema = Joi.object({
 const getReports = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const sort = req.query.sort || 'patientName';
+  const sort = req.query.sort || "patientName";
   const skip = (page - 1) * limit;
 
   try {
@@ -55,7 +55,7 @@ const getReports = async (req, res) => {
       pages: Math.ceil(total / limit),
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -64,11 +64,26 @@ const getReportById = async (req, res) => {
   try {
     const report = await PatientReport.findById(req.params.id);
     if (!report) {
-      return res.status(404).json({ message: 'Report not found' });
+      return res.status(404).json({ message: "Report not found" });
     }
     res.json(report);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Get a single report by Hospital ID
+const getReportByHospitalId = async (req, res) => {
+  try {
+    const report = await PatientReport.findOne({
+      hospitalId: req.params.hospitalId,
+    });
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+    res.json(report);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -84,9 +99,9 @@ const createReport = async (req, res) => {
     res.status(201).json(report);
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ message: 'Hospital ID already exists' });
+      return res.status(400).json({ message: "Hospital ID already exists" });
     }
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -103,14 +118,14 @@ const updateReport = async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!report) {
-      return res.status(404).json({ message: 'Report not found' });
+      return res.status(404).json({ message: "Report not found" });
     }
     res.json(report);
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ message: 'Hospital ID already exists' });
+      return res.status(400).json({ message: "Hospital ID already exists" });
     }
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -119,17 +134,18 @@ const deleteReport = async (req, res) => {
   try {
     const report = await PatientReport.findByIdAndDelete(req.params.id);
     if (!report) {
-      return res.status(404).json({ message: 'Report not found' });
+      return res.status(404).json({ message: "Report not found" });
     }
-    res.json({ message: 'Report deleted' });
+    res.json({ message: "Report deleted" });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 module.exports = {
   getReports,
   getReportById,
+  getReportByHospitalId,
   createReport,
   updateReport,
   deleteReport,
