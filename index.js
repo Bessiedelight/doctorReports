@@ -13,6 +13,7 @@ const allowedOrigins = [
   'https://better-health-live.vercel.app',// Production
   'https://betterhealthpatient.vercel.app',
   'https://better-health-hospital.vercel.app',
+  'https://opuscare-patient.vercel.app',
 ];
 
 // Configure CORS to allow multiple origins
